@@ -8,10 +8,17 @@ namespace P2pB2b.Net.Objects.SocketParams
     {
         private static int counter = 1;
 
-        public static P2pSocketSubscribeRequest<T> Create<T>(T data, string method)
+        public static P2pSocketEvent<T> Create<T>(T data, string method)
         {
             counter++;
-            return new P2pSocketSubscribeRequest<T>(counter, method, data);
+            return new P2pSocketEvent<T>(counter, method, data);
+
+        }
+        public static P2pSocketEvent Create(string method)
+        {
+            Console.WriteLine($"Creating {method} request");
+            counter++;
+            return new P2pSocketEvent( method, counter);
 
         }
     }

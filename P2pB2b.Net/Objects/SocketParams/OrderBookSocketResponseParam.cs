@@ -1,108 +1,26 @@
 ﻿using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
+using P2pB2b.Net.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace P2pB2b.Net.Objects.SocketParams
 {
-    [JsonConverter(typeof(ArrayConverter))]
-    public class OrderBookSocketUpdateParam:IConvertible
+    [JsonConverter(typeof(ArrayConvert))]
+
+    public class P2pOrderBookUpdate
     {
-        public OrderBookSocketUpdateParam()
+        public P2pOrderBookUpdate()
         {
 
         }
         [ArrayProperty(0)]
         public bool IsFull { get; set; }
         [ArrayProperty(1)]
-        public P2pOrderBook Update { get; set; }
+        public P2pOrderBook OrderBook { get; set; } = new P2pOrderBook();
         [ArrayProperty(2)]
         public string Symbol { get; set; }
 
-        public TypeCode GetTypeCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool ToBoolean(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public byte ToByte(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public char ToChar(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DateTime ToDateTime(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public decimal ToDecimal(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double ToDouble(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public short ToInt16(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int ToInt32(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public long ToInt64(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public sbyte ToSByte(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public float ToSingle(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string ToString(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object ToType(Type conversionType, IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ushort ToUInt16(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public uint ToUInt32(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ulong ToUInt64(IFormatProvider provider)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

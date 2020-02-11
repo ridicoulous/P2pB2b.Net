@@ -7,6 +7,8 @@ using P2pB2b.Net.Interfaces;
 using P2pB2b.Net.Objects;
 using P2pB2b.Net.Objects.SocketParams;
 using System;
+using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,29 +16,52 @@ namespace P2pConsoleTest
 {
     class Program
     {
+
         static async Task Main(string[] args)
         {
             var cred = new ApiCredentials("", "");
             var auth = new P2pAuthenticationProvider(cred);
-            var s = new P2pClient(new P2pClientOptions()
+            var p2pClient = new P2pClient(new P2pClientOptions()
             {
                 ApiCredentials = cred,
                 LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
                 LogWriters = new System.Collections.Generic.List<System.IO.TextWriter>(),
             }, auth);
-          //  var order = JsonConvert.DeserializeObject<P2pOrderHistory>("{\"amount\": \"1\",\"price\": \"0.01\",\"type\": \"limit\",\"id\": 9740,\"side\": \"sell\",\"ctime\": 1533568890.583023,\"takerFee\": \"0.002\",\"ftime\": 1533630652.62185,\"market\": \"ETH_BTC\",\"makerFee\": \"0.002\",\"dealFee\": \"0.002\",\"dealStock\": \"1\",\"dealMoney\": \"0.01\"            }");
-            var sss = s.GetAccountBalance("BTC");
-            string t = "{ \"method\": \"depth.update\",  \"params\": [    false,    {      \"bids\": [        [          \"0.022622\",          \"0.171\"        ],        [          \"0.022619\",          \"0.001\"        ]      ],      \"asks\": [        [          \"0.022719\",          \"0.011\"        ],        [          \"0.023107\",          \"300.3\"        ]      ]    },    \"ETH_BTC\"  ],  \"id\": null}\"";
-            
-            var deser = JsonConvert.DeserializeObject<P2pSocketSubscribeRequest<OrderBookSocketUpdateParam>>(t);
 
-            var socket = new P2pSocketClient();
-            await socket.Test<P2pSocketSubscribeRequest<OrderBookSocketUpdateParam>>("ETH_BTC",OnData);
+            var place = await p2pClient.PlaceOrderAsync("BTC_USDT", P2pOrderSide.Sell, 0.001m, 20_000m);
+            if (place)
+            {
+                var cancel = await p2pClient.CancelOrderAsync(place.Data.Market, place.Data.OrderId);
+                while(!cancel)
+                {
+                    cancel = await p2pClient.CancelOrderAsync(place.Data.Market, place.Data.OrderId);
+                }
+            }
+            //P2pSymbolOrderBook ob = new P2pSymbolOrderBook("ETH_BTC", new P2pSymbolOrderBookOptions("P2p-ETH_BTC"));
+
+            //var deser = JsonConvert.DeserializeObject<P2pSocketSubscribeRequest<Ob>>(t);
+            //var deser2 = JsonConvert.DeserializeObject<P2pSocketSubscribeRequest<OrderBookSocketUpdateParam>>(t);
+            //ob.OnBestOffersChanged += Ob_OnBestOffersChanged;
+            //ob.Start();
+
+            //var socket = new P2pSocketClient();
+            //await socket.SubscribeToOrderBookUpdates("ETH_BTC",20,OnData);
             Console.ReadLine();
         }
-        static void OnData(P2pSocketSubscribeRequest<OrderBookSocketUpdateParam> dynamic)
+
+        private static void Ob_OnBestOffersChanged(CryptoExchange.Net.Interfaces.ISymbolOrderBookEntry arg1, CryptoExchange.Net.Interfaces.ISymbolOrderBookEntry arg2)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(arg2.Price);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("\t\t"+arg1.Price+"\n");
+            
+        }
+
+        static void OnData(P2pSocketEvent<P2pOrderBookUpdate> dynamic)
         {
             var res = dynamic;
         }
     }
+
 }

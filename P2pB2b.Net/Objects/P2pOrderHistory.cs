@@ -7,15 +7,22 @@ using System.Text;
 
 namespace P2pB2b.Net.Objects
 {
-    public class P2pOrderHistory
+    public class P2pOrder
     {
+       
         [JsonProperty("id")]
         public long Id { get; set; }
+
+        [JsonProperty("orderId")]
+        public long OrderId { get; set; }
         /// <summary>
         /// Order amount.
         /// </summary>
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
+
+        [JsonProperty("left")]
+        public decimal Left { get; set; }
         /// <summary>
         /// Order price.
         /// </summary>
@@ -34,13 +41,15 @@ namespace P2pB2b.Net.Objects
         public P2pOrderSide Side { get; set; }
 
         [JsonProperty("ctime"), JsonConverter(typeof(P2pTimestampConverter))]
-        public DateTime Ctime { get; set; }
+        public DateTime CreatedAt { get; set; }
+        [JsonProperty("timestamp"), JsonConverter(typeof(P2pTimestampConverter))]
+        public DateTime Timestamp { get; set; }
 
         [JsonProperty("takerFee")]
         public string TakerFee { get; set; }
 
         [JsonProperty("ftime"), JsonConverter(typeof(P2pTimestampConverter))]
-        public DateTime Ftime { get; set; }
+        public DateTime FinishedAt { get; set; }
 
         [JsonProperty("market")]
         public string Market { get; set; }
