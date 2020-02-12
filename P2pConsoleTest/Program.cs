@@ -39,20 +39,25 @@ namespace P2pConsoleTest
             //}
 
             P2pSymbolOrderBook ob = new P2pSymbolOrderBook("ETH_BTC", new P2pSymbolOrderBookOptions("P2p-ETH_BTC"));
+            //ob.OnOrderBookUpdate += Ob_OnOrderBookUpdate;
+            //ob.OnBestOffersChanged += Ob_OnBestOffersChanged;
+            //ob.Start();
 
-            ob.OnBestOffersChanged += Ob_OnBestOffersChanged;
-            ob.Start();
-
-            //var socket =  new P2pSocketClient(new P2pSocketClientOptions()
-            //{
-            //    AutoReconnect = true,
-            //    ReconnectInterval = TimeSpan.FromSeconds(2),
-            //    SocketNoDataTimeout = TimeSpan.FromSeconds(10),
-            //    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Info,
-            //    LogWriters = new List<System.IO.TextWriter>() { new ThreadSafeFileWriter("p2psocketlogger.log") }
-            //}, null);
-            //await socket.SubscribeDeals("ETH_BTC",OnData);
+            var socket = new P2pSocketClient(new P2pSocketClientOptions()
+            {
+                AutoReconnect = true,
+                ReconnectInterval = TimeSpan.FromSeconds(2),
+                SocketNoDataTimeout = TimeSpan.FromSeconds(10),
+                LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Info,
+                LogWriters = new List<System.IO.TextWriter>() { new ThreadSafeFileWriter("p2psocketlogger.log") }
+            }, null);
+            await socket.SubscribeDeals("ETH_BTC",OnData);
             Console.ReadLine();
+        }
+
+        private static void Ob_OnOrderBookUpdate(IEnumerable<CryptoExchange.Net.Interfaces.ISymbolOrderBookEntry> arg1, IEnumerable<CryptoExchange.Net.Interfaces.ISymbolOrderBookEntry> arg2)
+        {
+            Console.WriteLine(DateTime.UtcNow);
         }
 
         private static void OnData(P2pSocketEvent<DealsEvent> obj)
