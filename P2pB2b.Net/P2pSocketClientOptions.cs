@@ -9,6 +9,9 @@ namespace P2pB2b.Net
     {
         public P2pSocketClientOptions(string baseAddress= "wss://p2pb2b.io/trade_ws") : base(baseAddress)
         {
+            this.AutoReconnect = true;
+            this.ReconnectInterval = TimeSpan.FromSeconds(2);
+            this.SocketNoDataTimeout = TimeSpan.FromSeconds(5);            
         }
     }
 }

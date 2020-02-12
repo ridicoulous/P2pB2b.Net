@@ -18,7 +18,15 @@ namespace P2pB2b.Net.Objects.SocketParams
         [ArrayProperty(0)]
         public string Symbol { get; set; }
         [ArrayProperty(1)]
-        public List<P2pDeal> Deals { get; set; } = new List<P2pDeal>();      
+        private List<P2pDeal> deals { get; set; } = new List<P2pDeal>();
+        public List<P2pDeal> Deals
+        {
+            get
+            {
+                deals.ForEach(c => c.Symbol = Symbol);
+                return deals;
+            }
+        }
 
     }
 }

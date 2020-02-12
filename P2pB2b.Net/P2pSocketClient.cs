@@ -14,16 +14,18 @@ using System.Threading.Tasks;
 namespace P2pB2b.Net
 {
     public class P2pSocketClient : SocketClient, IP2pSocketClient
-    {      
+    {
         public P2pSocketClient() : base(new P2pSocketClientOptions(), null)
-        {           
+        {
             //Console.WriteLine(ping);
-            SendPeriodic(TimeSpan.FromSeconds(5), con => JsonConvert.SerializeObject(SocketRequestFactory.Create("server.ping")));
+          //  AddGenericHandler("Pong", (connection, token) => { });
+
+            SendPeriodic(TimeSpan.FromSeconds(1), con => JsonConvert.SerializeObject(SocketRequestFactory.Create("server.ping")));
         }
         public P2pSocketClient(P2pSocketClientOptions exchangeOptions, P2pAuthenticationProvider authenticationProvider) : base(exchangeOptions, authenticationProvider)
-        {
-            //AddGenericHandler("pong", (connection, token) => { });
-            SendPeriodic(TimeSpan.FromSeconds(10), con => SocketRequestFactory.Create("server.ping"));
+        {            
+          //  AddGenericHandler("Pong", (connection, token) => { });
+            SendPeriodic(TimeSpan.FromSeconds(1), con => SocketRequestFactory.Create("server.ping"));
         }
         public async Task<CallResult<UpdateSubscription>> Test<T>(string pair, Action<T> onData)
         {
@@ -34,25 +36,35 @@ namespace P2pB2b.Net
         }
         public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdates(string pair, int limit, Action<P2pSocketEvent<P2pOrderBookUpdate>> onData)
         {
-            var req = SocketRequestFactory.Create(new OrderBookSubscribeParam(pair,limit), "depth.subscribe");
+            var req = SocketRequestFactory.Create(new OrderBookSubscribeParam(pair, limit), "depth.subscribe");
             return await Subscribe(JsonConvert.SerializeObject(req), null, false, onData).ConfigureAwait(false);
         }
         public async Task<CallResult<UpdateSubscription>> SubscribeDeals(string pair, Action<P2pSocketEvent<DealsEvent>> onData)
         {
             var req = SocketRequestFactory.Create(new string[] { pair }, "deals.subscribe");
+            //   await Subscribe(JsonConvert.SerializeObject(req), null, false, onData).ConfigureAwait(false);
+            //  await Task.Delay(400);
+            log.Write(CryptoExchange.Net.Logging.LogVerbosity.Info, $"Subscribing to {req.Method}");
             return await Subscribe(JsonConvert.SerializeObject(req), null, false, onData).ConfigureAwait(false);
         }
         /// <inheritdoc />
         protected override bool HandleQueryResponse<T>(SocketConnection s, object request, JToken data, out CallResult<T> callResult)
-        {
+        {            
             Console.WriteLine(data.ToString());
             callResult = null;
-            var cRequest = JsonConvert.DeserializeObject<P2pSocketEvent>(request.ToString());
+            var cRequest = Deserialize<P2pSocketEvent>(request.ToString());
+            if(cRequest)
+            {
+                if (cRequest.Data.Method.Contains("ping") && (string)data["result"] == "pong")
+                {
+                    return true;
+                }
+            }
             var idField = data["id"];
             if (idField == null)
                 return false;
 
-            if ((int)idField != cRequest.Id)
+            if ((int)idField != cRequest.Data.Id)
                 return false;
 
             if (data["error"].Type != JTokenType.Null)
@@ -78,10 +90,17 @@ namespace P2pB2b.Net
 
         /// <inheritdoc />
         protected override bool HandleSubscriptionResponse(SocketConnection s, SocketSubscription subscription, object request, JToken message, out CallResult<object>? callResult)
-        {           
-            if ((string)message["result"]["status"] != "success")
+        {
+
+            if (message["method"]?.Type != JTokenType.Null)
             {
-                callResult = new CallResult<object>(null, new P2pServerError(42,"Socket subscribtion error",message));
+                callResult = new CallResult<object>(null, new P2pServerError(42, "Socket subscribtion error", message));
+                return false;
+            }
+
+            if ((string)message["result"]["status"] != null && (string)message["result"]["status"] != "success")
+            {
+                callResult = new CallResult<object>(null, new P2pServerError(42, "Socket subscribtion error", message));
                 return false;
             }
             callResult = new CallResult<object>(message, null);
@@ -91,15 +110,15 @@ namespace P2pB2b.Net
         /// <inheritdoc />
         protected override bool MessageMatchesHandler(JToken message, object request)
         {
-            var hRequest = JsonConvert.DeserializeObject<P2pSocketEvent>(request.ToString());
-            if (message["result"]!=null)
-                return false;
-
-            var res = hRequest.Method.Replace(".subscribe", "") == ((string)message["method"]).Replace(".update", "");
-            if (res)
-                return res;
-            else
-            {                
+            try
+            {   
+                var hRequest = JsonConvert.DeserializeObject<P2pSocketEvent>(request.ToString());
+                return (hRequest.Method.Replace(".subscribe", "") == ((string)message["method"])?.Replace(".update", "")) ||(message.ToString().Contains("pong")&&hRequest.Method=="server.ping");
+                
+            }
+            catch (Exception ex)
+            {
+                log.Write(CryptoExchange.Net.Logging.LogVerbosity.Error, $"Exception handled at MessageMatchingHandler:\n{ex.ToString()}");
                 return false;
             }
         }
@@ -107,8 +126,16 @@ namespace P2pB2b.Net
         /// <inheritdoc />
         protected override bool MessageMatchesHandler(JToken message, string identifier)
         {
-
-            return true;
+            try
+            {
+                if (message.Type != JTokenType.Object)
+                    return false;
+                return identifier == "Pong" && message["result"].ToString().Contains("pong");
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         /// <inheritdoc />
@@ -135,7 +162,7 @@ namespace P2pB2b.Net
         public async Task<CallResult<bool>> PingAsync()
         {
             var pingRequest = JsonConvert.SerializeObject(SocketRequestFactory.Create("server.ping"));
-            
+
             var result = await Query<dynamic>(pingRequest, false).ConfigureAwait(false);
             return new CallResult<bool>(result.Success, result.Error);
         }

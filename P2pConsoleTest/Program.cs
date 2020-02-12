@@ -37,21 +37,27 @@ namespace P2pConsoleTest
             //        cancel = await p2pClient.CancelOrderAsync(place.Data.Market, place.Data.OrderId);
             //    }
             //}
+
             //P2pSymbolOrderBook ob = new P2pSymbolOrderBook("ETH_BTC", new P2pSymbolOrderBookOptions("P2p-ETH_BTC"));
 
-            //var deser = JsonConvert.DeserializeObject<P2pSocketSubscribeRequest<Ob>>(t);
-            //var deser2 = JsonConvert.DeserializeObject<P2pSocketSubscribeRequest<OrderBookSocketUpdateParam>>(t);
             //ob.OnBestOffersChanged += Ob_OnBestOffersChanged;
             //ob.Start();
 
-            var socket = new P2pSocketClient();
+            var socket =  new P2pSocketClient(new P2pSocketClientOptions()
+            {
+                AutoReconnect = true,
+                ReconnectInterval = TimeSpan.FromSeconds(2),
+                SocketNoDataTimeout = TimeSpan.FromSeconds(10),
+                LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Info,
+                LogWriters = new List<System.IO.TextWriter>() { new ThreadSafeFileWriter("p2psocketlogger.log") }
+            }, null);
             await socket.SubscribeDeals("ETH_BTC",OnData);
             Console.ReadLine();
         }
 
         private static void OnData(P2pSocketEvent<DealsEvent> obj)
         {
-            Console.WriteLine(obj.Data.Deals[0].Price);
+            Console.WriteLine(obj.Data.Deals[0].Time);
         }
 
         private static void Ob_OnBestOffersChanged(CryptoExchange.Net.Interfaces.ISymbolOrderBookEntry arg1, CryptoExchange.Net.Interfaces.ISymbolOrderBookEntry arg2)

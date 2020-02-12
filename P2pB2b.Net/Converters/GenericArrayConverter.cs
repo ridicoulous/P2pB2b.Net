@@ -34,7 +34,8 @@ namespace P2pB2b.Net.Converters
 
         private static object? ParseObject(JArray arr, object result, Type objectType)
         {
-            foreach (var property in objectType.GetProperties())
+            foreach (var property in objectType.GetProperties(BindingFlags.NonPublic | BindingFlags.Public
+        | BindingFlags.Instance | BindingFlags.Static))
             {
                 var attribute =
                     (ArrayPropertyAttribute)property.GetCustomAttribute(typeof(ArrayPropertyAttribute));

@@ -1,4 +1,5 @@
 ﻿using CryptoExchange.Net.Interfaces;
+using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.OrderBook;
 using CryptoExchange.Net.Sockets;
@@ -22,7 +23,14 @@ namespace P2pB2b.Net
         {
             limit = options.Limit;
             restClient = new P2pClient();
-            socketClient = new P2pSocketClient();
+            socketClient = new P2pSocketClient(new P2pSocketClientOptions()
+            {
+                AutoReconnect = true,
+                ReconnectInterval = TimeSpan.FromSeconds(2),
+                SocketNoDataTimeout = TimeSpan.FromSeconds(10),
+                LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
+                LogWriters = new List<System.IO.TextWriter>() { options.LogFileName!=null? new ThreadSafeFileWriter($"p2psocketlogger-{symbol}.log"):default }
+            }, null);
         }
 
 

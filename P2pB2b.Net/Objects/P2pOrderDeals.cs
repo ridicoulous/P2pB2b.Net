@@ -34,15 +34,16 @@ namespace P2pB2b.Net.Objects
         [JsonProperty("id")]
         public long Id { get; set; }
         [JsonProperty("price")]
-        public string Price { get; set; }
+        public decimal Price { get; set; }
 
         [JsonProperty("amount")]
-        public string Amount { get; set; }
+        public decimal Amount { get; set; }
         [JsonProperty("time"), JsonConverter(typeof(P2pTimestampConverter))]
         public DateTime Time { get; set; }
 
         [JsonProperty("type")]
         public string Type { get; set; }
-      
+        [JsonIgnore]
+        public string Symbol { get; set; }
     }
 }
