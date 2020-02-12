@@ -15,17 +15,8 @@ namespace P2pB2b.Net.Objects
         [JsonProperty("records")]
         public List<P2pOrderDeal> Records { get; set; }
     }
-    public class P2pOrderDeal
-    {
-        [JsonProperty("id")]
-        public long Id { get; set; }
-        [JsonProperty("price")]
-        public string Price { get; set; }
-
-        [JsonProperty("amount")]
-        public string Amount { get; set; }
-        [JsonProperty("time"), JsonConverter(typeof(P2pTimestampConverter))]
-        public DateTime Time { get; set; }
+    public class P2pOrderDeal:P2pDeal
+    {     
 
         [JsonProperty("fee")]        
         public decimal Fee { get; set; }
@@ -37,5 +28,21 @@ namespace P2pB2b.Net.Objects
 
         [JsonProperty("deal")]
         public decimal Deal { get; set; }
+    }
+    public class P2pDeal
+    {
+        [JsonProperty("id")]
+        public long Id { get; set; }
+        [JsonProperty("price")]
+        public string Price { get; set; }
+
+        [JsonProperty("amount")]
+        public string Amount { get; set; }
+        [JsonProperty("time"), JsonConverter(typeof(P2pTimestampConverter))]
+        public DateTime Time { get; set; }
+
+        [JsonProperty("type")]
+        public string Type { get; set; }
+      
     }
 }

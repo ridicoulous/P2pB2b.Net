@@ -37,6 +37,11 @@ namespace P2pB2b.Net
             var req = SocketRequestFactory.Create(new OrderBookSubscribeParam(pair,limit), "depth.subscribe");
             return await Subscribe(JsonConvert.SerializeObject(req), null, false, onData).ConfigureAwait(false);
         }
+        public async Task<CallResult<UpdateSubscription>> SubscribeDeals(string pair, Action<P2pSocketEvent<DealsEvent>> onData)
+        {
+            var req = SocketRequestFactory.Create(new string[] { pair }, "deals.subscribe");
+            return await Subscribe(JsonConvert.SerializeObject(req), null, false, onData).ConfigureAwait(false);
+        }
         /// <inheritdoc />
         protected override bool HandleQueryResponse<T>(SocketConnection s, object request, JToken data, out CallResult<T> callResult)
         {

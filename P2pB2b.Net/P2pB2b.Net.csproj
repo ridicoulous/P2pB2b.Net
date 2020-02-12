@@ -3,6 +3,15 @@
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.1</Version>
+    <PackageReleaseNotes>initial beta</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/ridicoulous/P2pB2b.Net</RepositoryUrl>
+    <PackageTags>p2pb2p, exchange connector</PackageTags>
+    <PackageProjectUrl>https://p2pb2b.io</PackageProjectUrl>
+    <Description />
+    <Copyright>ridicoulous</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>

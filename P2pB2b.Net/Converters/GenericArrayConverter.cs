@@ -76,7 +76,7 @@ namespace P2pB2b.Net.Converters
                 }
                 JToken token1 = arr[attribute.Index];
 
-                if (token1.Type == JTokenType.Object)
+                if (token1.Type == JTokenType.Object||token1.Type==JTokenType.Array)
                 {
                     var temp = JsonConvert.DeserializeObject(token1.ToString(), property.PropertyType);
                     var newInstanse = Activator.CreateInstance(property.PropertyType);

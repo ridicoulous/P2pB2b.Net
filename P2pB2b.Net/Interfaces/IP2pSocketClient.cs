@@ -10,5 +10,7 @@ namespace P2pB2b.Net.Interfaces
     {
         CallResult<bool> Ping();
         Task<CallResult<bool>> PingAsync();
+
+        
     }
 }

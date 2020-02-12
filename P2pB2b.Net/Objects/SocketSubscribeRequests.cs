@@ -42,11 +42,7 @@ namespace P2pB2b.Net.Objects
             Id = id;
             Method = method;
         }
-
-        [JsonProperty("id")]
-        public int? Id { get; set; }
-        [JsonProperty("method")]
-        public string Method { get; set; }
+    
         [JsonProperty("params")]    
         public new T Data { get; set; }
   

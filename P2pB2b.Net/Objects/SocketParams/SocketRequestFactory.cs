@@ -6,7 +6,7 @@ namespace P2pB2b.Net.Objects.SocketParams
 {
     public static class SocketRequestFactory
     {
-        private static int counter = 1;
+        private static int counter = 0;
 
         public static P2pSocketEvent<T> Create<T>(T data, string method)
         {
@@ -15,8 +15,7 @@ namespace P2pB2b.Net.Objects.SocketParams
 
         }
         public static P2pSocketEvent Create(string method)
-        {
-            Console.WriteLine($"Creating {method} request");
+        {            
             counter++;
             return new P2pSocketEvent( method, counter);
 
