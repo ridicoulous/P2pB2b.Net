@@ -29,7 +29,7 @@ namespace P2pB2b.Net
                 ReconnectInterval = TimeSpan.FromSeconds(2),
                 SocketNoDataTimeout = TimeSpan.FromSeconds(10),
                 LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
-                LogWriters = new List<System.IO.TextWriter>() { options.LogFileName!=null? new ThreadSafeFileWriter($"p2psocketlogger-{symbol}.log"):default }
+               // LogWriters = new List<System.IO.TextWriter>() {  new ThreadSafeFileWriter($"p2psocketlogger-{symbol}.log") }
             }, null);
         }
 
