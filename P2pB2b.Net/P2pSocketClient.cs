@@ -19,12 +19,12 @@ namespace P2pB2b.Net
         {
             //Console.WriteLine(ping);
             //  AddGenericHandler("Pong", (connection, token) => { });
-            // SendPeriodic(TimeSpan.FromSeconds(5), con => JsonConvert.SerializeObject(SocketRequestFactory.Create("server.ping")));
+            SendPeriodic(TimeSpan.FromSeconds(5), con => JsonConvert.SerializeObject(SocketRequestFactory.Create("server.ping")));
         }
         public P2pSocketClient(P2pSocketClientOptions exchangeOptions, P2pAuthenticationProvider authenticationProvider) : base(exchangeOptions, authenticationProvider)
         {
             //  AddGenericHandler("Pong", (connection, token) => { });
-            //SendPeriodic(TimeSpan.FromSeconds(5), con => SocketRequestFactory.Create("server.ping"));
+            SendPeriodic(TimeSpan.FromSeconds(5), con => SocketRequestFactory.Create("server.ping"));
         }
         public async Task<CallResult<UpdateSubscription>> Test<T>(string pair, Action<T> onData)
         {
