@@ -18,8 +18,8 @@ namespace P2pB2b.Net.Interfaces
         CallResult<Dictionary<string,List<P2pOrder>>> GetOrdersHistory();
         Task<CallResult<Dictionary<string, List<P2pOrder>>>> GetOrdersHistoryAsync(CancellationToken ct = default);
 
-        CallResult<List<P2pOrderDeals>> GetOrderDeals(long orderId, int limit=50, int offset=0);
-        Task<CallResult<List<P2pOrderDeals>>> GetOrderDealsAsync(long orderId, int limit = 50, int offset = 0,CancellationToken ct = default);
+        CallResult<List<P2pOrderDeal>> GetOrderDeals(long orderId, int limit=50, int offset=0);
+        Task<CallResult<List<P2pOrderDeal>>> GetOrderDealsAsync(long orderId, int limit = 50, int offset = 0,CancellationToken ct = default);
 
         CallResult<List<P2pExecutionHistory>> Getexecutions(string pair, int limit = 50, int offset = 0);
         Task<CallResult<List<P2pExecutionHistory>>> GetexecutionsAsync(string pair, int limit = 50, int offset = 0, CancellationToken ct = default);

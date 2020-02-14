@@ -19,14 +19,18 @@ namespace P2pConsoleTest
 
         static async Task Main(string[] args)
         {
-            //var cred = new ApiCredentials("", "");
-            //var auth = new P2pAuthenticationProvider(cred);
-            //var p2pClient = new P2pClient(new P2pClientOptions()
-            //{
-            //    ApiCredentials = cred,
-            //    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
+            var cred = new ApiCredentials("fdbfb3a728510c692d420af675b95eda", "3919a2e9341bb885b0bb45a942e767e1");
+            var auth = new P2pAuthenticationProvider(cred);
+            var p2pClient = new P2pClient(new P2pClientOptions()
+            {
+                ApiCredentials = cred,
+                LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
             //    LogWriters = new System.Collections.Generic.List<System.IO.TextWriter>(),
-            //}, auth);
+            }, auth);
+            //var tr = p2pClient.GetOpenOrders("EEX_BTC");
+            var tr2 = p2pClient.GetOrdersHistory();
+            var res = tr2.Data["EEX_BTC"][0];
+            var deals = p2pClient.GetOrderDeals(res.Id);
 
             //var place = await p2pClient.PlaceOrderAsync("BTC_USDT", P2pOrderSide.Sell, 0.001m, 20_000m);
             //if (place)

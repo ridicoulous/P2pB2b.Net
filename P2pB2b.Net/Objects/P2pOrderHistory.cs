@@ -9,9 +9,9 @@ namespace P2pB2b.Net.Objects
 {
     public class P2pOrder
     {
-       
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public long _id { get; set; }
+        public long Id { get { return _id == 0 ? OrderId : _id; } set { _id = value; } }
 
         [JsonProperty("orderId")]
         public long OrderId { get; set; }

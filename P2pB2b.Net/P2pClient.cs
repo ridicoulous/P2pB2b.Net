@@ -63,9 +63,9 @@ namespace P2pB2b.Net
             return new CallResult<Dictionary<string, List<P2pOrder>>>(result.Data?.Result, result.Error);
         }
 
-        public CallResult<List<P2pOrderDeals>> GetOrderDeals(long orderId, int limit = 50, int offset = 0) => GetOrderDealsAsync(orderId, limit, offset).Result;
+        public CallResult<List<P2pOrderDeal>> GetOrderDeals(long orderId, int limit = 50, int offset = 0) => GetOrderDealsAsync(orderId, limit, offset).Result;
 
-        public async Task<CallResult<List<P2pOrderDeals>>> GetOrderDealsAsync(long orderId, int limit = 50, int offset = 0, CancellationToken ct = default)
+        public async Task<CallResult<List<P2pOrderDeal>>> GetOrderDealsAsync(long orderId, int limit = 50, int offset = 0, CancellationToken ct = default)
         {
             if (offset > 10_000)
             {
@@ -89,8 +89,8 @@ namespace P2pB2b.Net
                 {"limit",limit },
                 {"offset",offset }
             };
-            var result = await SendRequest<P2pResponse<List<P2pOrderDeals>>>(GetUrl(GetOrderDealsEndpoint), HttpMethod.Post, ct, parameters, true);
-            return new CallResult<List<P2pOrderDeals>>(result.Data?.Result, result.Error);
+            var result = await SendRequest<P2pResponse<P2pOrderDeals>>(GetUrl(GetOrderDealsEndpoint), HttpMethod.Post, ct, parameters, true);
+            return new CallResult<List<P2pOrderDeal>>(result.Data?.Result.Records, result.Error);
         }
         public CallResult<List<P2pExecutionHistory>> Getexecutions(string pair, int limit = 50, int offset = 0) => GetexecutionsAsync(pair, limit, offset).Result;
 
@@ -149,8 +149,8 @@ namespace P2pB2b.Net
                 {"limit",limit },
                 {"offset",offset }
             };
-            var result = await SendRequest<P2pResponse<P2pResponseWithTotals<List<P2pOrder>>>>(GetUrl(GetOpenOrderEndpoint), HttpMethod.Post, ct, parameters, true);
-            return new CallResult<List<P2pOrder>>(result.Data?.Result?.Result, result.Error);
+            var result = await SendRequest<P2pResponse<List<P2pOrder>>>(GetUrl(GetOpenOrderEndpoint), HttpMethod.Post, ct, parameters, true);
+            return new CallResult<List<P2pOrder>>(result.Data?.Result, result.Error);
         }
         public CallResult<P2pOrder> PlaceOrder(string market, P2pOrderSide side, decimal amount, decimal price) => PlaceOrderAsync(market, side, amount, price).Result;
 
