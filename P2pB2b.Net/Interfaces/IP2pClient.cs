@@ -10,6 +10,10 @@ namespace P2pB2b.Net.Interfaces
 {
     public interface IP2pClient
     {
+        CallResult<P2pOrderBook> GetOrderBook(string market, int limit=20, int interval=0);
+        Task<CallResult<P2pOrderBook>> GetOrderBookAsync(string market , int limit = 20, int interval = 0, CancellationToken ct = default);
+
+
         CallResult<Dictionary<string, AccountDetails>> GetAccountBalances();
         Task<CallResult<Dictionary<string, AccountDetails>>> GetAccountBalancesAsync(CancellationToken ct = default);
         CallResult<AccountDetails> GetAccountBalance(string currency);

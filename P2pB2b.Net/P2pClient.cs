@@ -26,7 +26,7 @@ namespace P2pB2b.Net
         }
         public P2pClient(P2pClientOptions exchangeOptions, P2pAuthenticationProvider authenticationProvider) : base(exchangeOptions, authenticationProvider)
         {
-            this.log.UpdateWriters(new System.Collections.Generic.List<System.IO.TextWriter>() { new ThreadSafeFileWriter("log.log") });
+           
         }
 
         private const string AccountBalanceEndpoint = "account/balance";
@@ -37,6 +37,8 @@ namespace P2pB2b.Net
         private const string GetOpenOrderEndpoint = "orders";
         private const string CreateOrderEndpoint = "order/new";
         private const string CancelOrderEndpoint = "order/cancel";
+        private const string OrderBookDepthEndpoint = "public/depth/result";
+
 
 
         public CallResult<Dictionary<string, AccountDetails>> GetAccountBalances() => GetAccountBalancesAsync().Result;
@@ -178,7 +180,20 @@ namespace P2pB2b.Net
             var result = await SendRequest<P2pResponse<P2pOrder>>(GetUrl(CancelOrderEndpoint), HttpMethod.Post, ct, parameters, true);
             return new CallResult<P2pOrder>(result.Data?.Result, result.Error);
         }
+        public CallResult<P2pOrderBook> GetOrderBook(string market, int limit = 20, int interval = 0) => GetOrderBookAsync(market, limit, interval).Result;
 
+        public async Task<CallResult<P2pOrderBook>> GetOrderBookAsync(string market, int limit = 20, int interval = 0, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>()
+            {
+                { "market",market},
+                {"limit",limit},
+                {"interval",interval}
+            };
+            var result = await SendRequest<P2pResponse<P2pOrderBook>>(GetUrl(OrderBookDepthEndpoint), HttpMethod.Get, ct, parameters, false);
+            return new CallResult<P2pOrderBook>(result.Data?.Result, result.Error);
+
+        }
 
 
         #region Helpers
@@ -194,6 +209,8 @@ namespace P2pB2b.Net
             }
             return null;
         }
+
+
 
 
         #endregion

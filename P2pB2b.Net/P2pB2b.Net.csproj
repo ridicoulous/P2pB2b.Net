@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.7</Version>
+    <Version>0.0.9</Version>
     <PackageReleaseNotes>initial beta</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/ridicoulous/P2pB2b.Net</RepositoryUrl>
     <PackageTags>p2pb2p, exchange connector</PackageTags>
