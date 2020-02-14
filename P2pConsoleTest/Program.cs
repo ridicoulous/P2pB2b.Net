@@ -19,7 +19,7 @@ namespace P2pConsoleTest
 
         static async Task Main(string[] args)
         {
-            var cred = new ApiCredentials("fdbfb3a728510c692d420af675b95eda", "3919a2e9341bb885b0bb45a942e767e1");
+            var cred = new ApiCredentials("", "");
             var auth = new P2pAuthenticationProvider(cred);
             var p2pClient = new P2pClient(new P2pClientOptions()
             {
