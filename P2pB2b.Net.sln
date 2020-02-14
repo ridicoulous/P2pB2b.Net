@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P2pB2b.Net", "P2pB2b.Net\P2pB2b.Net.csproj", "{2BC43C73-97F1-46CE-9C36-33FD22840270}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P2pB2b.Net", "P2pB2b.Net\P2pB2b.Net.csproj", "{2BC43C73-97F1-46CE-9C36-33FD22840270}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P2pConsoleTest", "P2pConsoleTest\P2pConsoleTest.csproj", "{F3C5FB76-426C-4BF7-A172-9315F1D63ECC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P2pConsoleTest", "P2pConsoleTest\P2pConsoleTest.csproj", "{F3C5FB76-426C-4BF7-A172-9315F1D63ECC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P2pB2b.Tests", "P2pB2b.Tests\P2pB2b.Tests.csproj", "{D874640B-62FF-49F5-87AB-33BC80805C16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F3C5FB76-426C-4BF7-A172-9315F1D63ECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3C5FB76-426C-4BF7-A172-9315F1D63ECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3C5FB76-426C-4BF7-A172-9315F1D63ECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D874640B-62FF-49F5-87AB-33BC80805C16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D874640B-62FF-49F5-87AB-33BC80805C16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D874640B-62FF-49F5-87AB-33BC80805C16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D874640B-62FF-49F5-87AB-33BC80805C16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
